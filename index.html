@@ -1195,86 +1195,7 @@ new google.translate.TranslateElement({pageLanguage: 'en', layout: google.transl
     document.getElementById("xy").innerHTML = new Date() + "<br>";
 	new Tarot(document.getElementById("xy").innerHTML);    
  
-    let cv = document.getElementById("cv");
-    let ctx = cv.getContext("2d");
-    console.log(cv);
-    console.log(ctx);
-    let idata = ctx.getImageData(0,0,cv.width,cv.height);
-    let idata2;
-    let idata3;
-    let m = [];
- 
-    idata2 = [];
-    idata3 = [];
     
-    for(let i = 0;i < cv.width;++i) {
-    	let xs = []
-    	for(let j = 0;j < cv.height;++j) {
-    		let ys = [];
-    		for(let k = 0;k < 4;++k) {
-    			ys.push(0);
-    		}
-    		xs.push(ys);
-    	}
-    	idata2.push(xs);
-    }
-
-    for(let i = 0;i < cv.width;++i) {
-    	let xs = []
-    	for(let j = 0;j < cv.height;++j) {
-    		let ys = [];
-    		for(let k = 0;k < 4;++k) {
-    			ys.push(0);
-    		}
-    		xs.push(ys);
-    	}
-    	idata3.push(xs);
-    }
-     
-    
-    function randomizeRect(x,y,w,h) {
-		for(let i = 0;i < w - 2;++i) {
-			let xs = []
-			for(let j = 0;j < h - 2;++j) {
-				let ys = [];
-				for(let k = 0;k < 4;++k) {
-					idata2[i + x + 1][j + y + 1][k] =  255 * Math.random();
-				}
-			}
-		}
-    }
-    
-	function init() {
-		m = [];
-		for(let i = 0;i < 4;++i) {
-			m.push([
-				Math.round(15 * (Math.random() - 0.5)), //dx
-				Math.round(15 * (Math.random() - 0.5)), //dy
-				2 * (Math.random() - 0.5), //dc
-				2 * (Math.random() - 0.5), //dc
-				Math.floor(3 * Math.random()), //ir
-				Math.floor(3 * Math.random()), //ig
-				Math.floor(3 * Math.random()), //ib
-			]);
-		}
-
-        console.log(m);
-        
-		idata = ctx.getImageData(0,0,cv.width,cv.height);
-		idata2 = [];
-		
-		for(let i = 0;i < cv.width;++i) {
-			let xs = []
-			for(let j = 0;j < cv.height;++j) {
-				let ys = [];
-				for(let k = 0;k < 4;++k) {
-					ys.push(0);
-				}
-				xs.push(ys);
-			}
-			idata2.push(xs);
-		}
-	}
 	
    	function key(evt) {
         if(evt.key == "Enter" || evt.key == ".") {
@@ -1289,7 +1210,6 @@ new google.translate.TranslateElement({pageLanguage: 'en', layout: google.transl
             var myDiv = document.getElementById("xy");
             myDiv.scrollTop = myDiv.scrollHeight;
 	    },500);
-			init();
         }
     }
  
