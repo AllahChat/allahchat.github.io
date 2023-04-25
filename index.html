@@ -1296,7 +1296,7 @@ new google.translate.TranslateElement({pageLanguage: 'en', layout: google.transl
             function speak() {
             var msg = new SpeechSynthesisUtterance(); 
             let xs = [(new Tarot(""+new Date())).get(),"Ich liebe dich","gibs mir","ja aaaa"];
-            if(Math.random() < 0.5)
+            if(Math.random() < 1)
             msg.text = 'Haaaach ?'; 	
             else
                 msg.text = xs[Math.floor(Math.random() * xs.length)];
@@ -1314,11 +1314,11 @@ new google.translate.TranslateElement({pageLanguage: 'en', layout: google.transl
         function speak2() {
             var msg = new SpeechSynthesisUtterance(); 
             let xs = ["Ich liebe dich","gibs mir","ja aaaa"];
-    if(Math.random() < 0.5)
+    if(Math.random() < 1)
      msg.text =  (new Tarot(""+new Date())).get();
     else
     msg.text = xs[Math.floor(Math.random() * xs.length)];
-            msg.volume = 1; // 0 to 1 	
+            msg.volume = 0.5; // 0 to 1 	
             //msg.rate = 2 * Math.random(); // 0.1 to 10 
             msg.pitch = 0.5 * Math.random()+1; //0 to 2 	
             msg.onend = function(e) { window.setTimeout(speak2,Math.round(10000*Math.random()))}; 	

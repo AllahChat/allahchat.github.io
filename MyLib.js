@@ -181,7 +181,10 @@ function fractal(cfg) {
 	let mathy = cfg[5] - (cfg[5] - cfg[4]) * this.thread.y / cfg[1];
 	let xr = 0;
 	let xi = 0;
-	for(let k = 0;k < 100;++k) {
+	let prevxr = 0;
+	let prevxi = 0;
+	
+	for(let k = 0;k < 50;++k) {
 		let zr = 1;
 		let zi = 0;
 		
@@ -215,15 +218,18 @@ function fractal(cfg) {
 		xr = (counterPolyR * denominatorPolyR + counterPolyI * denominatorPolyI) / z;
 		xi = (counterPolyI * denominatorPolyR - counterPolyR * denominatorPolyI) / z;
 
-		if(xr * xr + xi * xi > 10.0) {
+		if((xr - prevxr) * (xr - prevxr) + (xi - prevxi) * (xi - prevxi) < 0.1) {
 			this.color(
-				(Math.sin(0.05 * k * 2.0 * Math.PI) + 1.0) / 2.0,
-				(Math.sin(0.06 * k * 2.0 * Math.PI) + 1.0) / 2.0,
-				(Math.sin(0.07 * k * 2.0 * Math.PI) + 1.0) / 2.0,
+				(Math.sin(0.05 * k * 2.0 * Math.PI + cfg[18]) + 1.0) / 2.0,
+				(Math.sin(0.06 * k * 2.0 * Math.PI + cfg[18]) + 1.0) / 2.0,
+				(Math.sin(0.07 * k * 2.0 * Math.PI + cfg[18]) + 1.0) / 2.0,
 				1
 			);
 			return k;
 		}
+		
+		prevxr = xr;
+		prevxi = xi;
 	}
 	this.color(0,0,0,0);
 	return 0;
