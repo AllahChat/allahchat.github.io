@@ -1,0 +1,43 @@
+Yoda says : "Each one's own Part/Episode of you ... my Lea !!!"<br>
+
+<html>
+	<head>
+		<meta charset="utf8">
+	</head>
+	<body>
+	<script>
+		document.write("LKW für die 2er Potenzen<br>");
+		let start = 10 * (Math.random() - 0.5);
+		let pbremse;
+		let psum;
+		
+		let t = window.setInterval(() => {
+			pbremse = 2 * start;
+			let first = true;
+			for(let i = 0;i < 1000;++i) {
+				let bremse = pbremse + 10 * (Math.random() - 0.5);
+				let sum = start;
+				for(let j = 0;j < 1000;++j) {
+					sum = (sum = (sum - bremse) / bremse - bremse) / bremse;
+					sum = (sum = sum * sum + sum) * (sum = sum * sum + sum) + (sum = sum * sum + sum);
+				}
+				if((Math.abs(sum - 1) < Math.abs(psum - 1)) || first) {
+					first = false;
+					pbremse = bremse;
+					psum = sum;
+				}
+			}
+			document.write(psum + "<br>");
+			
+			if(Math.abs(psum - 1) < 0.01) {
+				window.clearInterval(t);
+				document.write("Pedo sagt : " + pbremse + " bremst " + start + " gegen " + psum + " im PLUS MINUS MAL GETEILT<br>");
+				}
+			},100);
+		</script>
+	</body>
+</html>
+
+
+Gaussians most comfortable ones : sin cos exp
+
