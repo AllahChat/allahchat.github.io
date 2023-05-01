@@ -62,7 +62,7 @@ constructor(sampleRate,tone,sustain,vol,vibOn,cvName) {
 	for(let i = 0;i < this.xs.length;++i) this.xs[i] = 0;		
 	this.xs[0] = Math.random() - 0.5;
 	this.xs[this.xs.length - 1] = Math.random() - 0.5;
-	this.fractal(0,this.xs.length - 1,0.5* Math.random(),0.1 + 1 * Math.random());
+	this.fractal(0,this.xs.length - 1,0.5 + 0.5 * Math.random(),0.1 + 1 * Math.random());
 	let min = 100000;
 	let max = -100000;
 	for(let i = 0;i < this.xs.length;++i) if(this.xs[i] > max) max = this.xs[i];		
