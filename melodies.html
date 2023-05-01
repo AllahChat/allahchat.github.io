@@ -58,7 +58,7 @@ class Instrument {
 
 //per instrument
 constructor(sampleRate,tone,sustain,vol,vibOn,cvName) {
-	this.xs = new Float32Array(256);
+	this.xs = new Float32Array(1024);
 	for(let i = 0;i < this.xs.length;++i) this.xs[i] = 0;		
 	this.xs[0] = Math.random() - 0.5;
 	this.xs[this.xs.length - 1] = Math.random() - 0.5;
