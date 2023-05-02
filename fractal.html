@@ -52,6 +52,10 @@
 		c = pc;
 		cfg = pcfg.slice();
 		
+        for(let i = 0;i < 2;++i) {
+            cfg[2 + 2 * i] += 0.005 * i * (Math.random() - 0.5);
+            cfg[2 + 2 * i + 1] += 0.005 * i * (Math.random() - 0.5);
+        }
         for(let i = 0;i < 5;++i) {
             cfg[6 + 2 * i] += 0.005 * i * (Math.random() - 0.5);
             cfg[6 + 2 * i + 1] += 0.005 * i * (Math.random() - 0.5);
