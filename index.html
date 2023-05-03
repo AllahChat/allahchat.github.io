@@ -1207,7 +1207,7 @@ new google.translate.TranslateElement({pageLanguage: 'en', layout: google.transl
     
 	
    	function key(evt) {
-        if(evt.key == "Enter" || evt.key == ".") {
+        if(evt.key == "Enter") {
             document.getElementById("xy").innerHTML += "<span style='color:white'>User Interpretation -> " + document.getElementById("ef").value + "</span><br>";
             document.getElementById("xy").innerHTML += "<span style='color:green'>User -> " + document.getElementById("ab").value + "</span><br>";
             document.getElementById("xy").innerHTML += "<span style='color:black'>PC -> " + (new Tarot(document.getElementById("xy").innerHTML)).get() + "</span><br>";
