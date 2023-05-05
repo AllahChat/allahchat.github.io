@@ -218,7 +218,8 @@ function fractal(cfg) {
 		xr = (counterPolyR * denominatorPolyR + counterPolyI * denominatorPolyI) / z;
 		xi = (counterPolyI * denominatorPolyR - counterPolyR * denominatorPolyI) / z;
 
-		if((xr - prevxr) * (xr - prevxr) + (xi - prevxi) * (xi - prevxi) < 0.1) {
+//		if((xr - prevxr) * (xr - prevxr) + (xi - prevxi) * (xi - prevxi) < 0.1) {
+		if((xr) * (xr) + (xi) * (xi) < 4) {
 			this.color(
 				(Math.sin(0.05 * k * 2.0 * Math.PI + cfg[18]) + 1.0) / 2.0,
 				(Math.sin(0.06 * k * 2.0 * Math.PI + cfg[18]) + 1.0) / 2.0,
