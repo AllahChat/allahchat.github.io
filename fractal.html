@@ -25,24 +25,11 @@
     cv.style.height = "100%";
 
 
-    let cfg = [w,h,-3,3,3,-3];
+    let cfg = [w,h,-50 * Math.random(),50 * Math.random(),50 * Math.random(),-50 * Math.random()];
     
-    for(let i = 1;i <= 10;++i) {
-        cfg.push(1 * (Math.random() - 0.5));
-        cfg.push(1 * (Math.random() - 0.5));
+    for(let i = 30;i >= 0;--i) {
+        cfg.push(i * i / 900 * (Math.random() - 0.5));
     }
-    
-    cfg[6] = 1 * (Math.random() - 0.5);
-    cfg[7] =  1 * (Math.random() - 0.5);
-    cfg[8] =  1 * (Math.random() - 0.5);
-    cfg[9] =  1 * (Math.random() - 0.5);
-    cfg[10 + 2 * rand(3)] = 1 + 1 * (Math.random() - 0.5);
-    cfg[11] =  1 * (Math.random() - 0.5);
-    
-    cfg[16] = 1 + 1 * (Math.random() - 0.5);
-    cfg[17] = 0 + 1 * (Math.random() - 0.5);
-	
-	cfg.push(0);
     
     kernel(cfg);
 	let pc = 100000000000;
@@ -52,17 +39,14 @@
 		c = pc;
 		cfg = pcfg.slice();
 		
-        for(let i = 0;i < 2;++i) {
+		let i;
+		
+        for(i = 0;i < 2;++i) {
             cfg[2 + 2 * i] += 0.125 * (Math.random() - 0.5);
             cfg[2 + 2 * i + 1] += 0.125 * (Math.random() - 0.5);
         }
-        for(let i = 0;i < 5;++i) {
-            cfg[6 + 2 * i] += 0.005 * i * (Math.random() - 0.5);
-            cfg[6 + 2 * i + 1] += 0.005 * i * (Math.random() - 0.5);
-        }
-        for(let i = 5;i < 10;++i) {
-            cfg[6 + 2 * i] += 0.005 * i * (Math.random() - 0.5);
-            cfg[6 + 2 * i + 1] += 0.005 * i * (Math.random() - 0.5);
+        for(;i < cfg.length;++i) {
+            cfg[i] += 0.0025 * (Math.random() - 0.5);
         }
 		let xs = kernel2(cfg);
 		
@@ -77,7 +61,7 @@
 		
 		c /= xs.length * xs[0].length;
 		
-		if((0.9999 * c < pc) || (c < 0.0125)) {
+		if((0.9 * c < pc) || (c < 0.9)) {
 			pc = c;
 			pcfg = cfg.slice();
 			cfg[18] += 0.01;
