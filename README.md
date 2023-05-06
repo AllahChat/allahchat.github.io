@@ -1,4 +1,4 @@
-# allhchat.github.io
+# allahchat.github.io
 
 
 https://huggingface.co/spaces/project-baize/Baize-7B
