@@ -2,10 +2,10 @@
 <head>
 	<script src="gpu-browser.min.js"></script>
 	<script>
-		function fractalUFO(cfgf,cfgg,width,height,minx,miny,maxx,maxy,color) {
+		function fractalUFO(cfgf,cfgg,width,height,mw,color) {
 			let xs = [
-				(maxx - minx) * this.thread.x / width + minx,
-				(maxy - miny) * this.thread.y / height + miny
+				(mw[2] - mw[0]) * this.thread.x / width + mw[0],
+				(mw[3] - mw[1]) * this.thread.y / height + mw[1]
 			];
 
 			let minz = 10000000;
@@ -13,7 +13,7 @@
 			let maxz = 0;
 			let maxk = 0;
 			
-			for(let k = 0;k < 10;++k) {
+			for(let k = 0;k <= 10;++k) {
 				xs = f(cfgf,xs);
 				let zs = f(cfgg,xs);
 				
@@ -44,12 +44,12 @@
 		
 		gpu.addFunction(function f(cfg,xs) {
 			let x = 0;
-			for(let i = 0;i < 5;++i) x += cfg[8 * i + 0] * Math.pow(xs[0],cfg[8 * i + 1]);
-			for(let i = 0;i < 5;++i) x += cfg[8 * i + 2] * Math.pow(xs[1],cfg[8 * i + 3]);
+			for(let i = 0;i < 3;++i) x += cfg[8 * i + 0] * Math.pow(xs[0],cfg[8 * i + 1]);
+			for(let i = 3;i < 6;++i) x += cfg[8 * i + 2] * Math.pow(xs[1],cfg[8 * i + 3]);
 			
 			let y = 0;
-			for(let i = 0;i < 5;++i) y += cfg[8 * i + 4] * Math.pow(xs[0],cfg[8 * i + 5]);
-			for(let i = 0;i < 5;++i) y += cfg[8 * i + 6] * Math.pow(xs[1],cfg[8 * i + 7]);
+			for(let i = 6;i < 9;++i) y += cfg[8 * i + 4] * Math.pow(xs[0],cfg[8 * i + 5]);
+			for(let i = 9;i < 12;++i) y += cfg[8 * i + 6] * Math.pow(xs[1],cfg[8 * i + 7]);
 			
 			return [x,y];
 		});
@@ -78,11 +78,40 @@
 		cv.style.width = "100%";
 		cv.style.height = "100%";
 		
+		let pc = 1000000000;
+		let pcfgf = cfgf.slice();
+		let pcfgg = cfgg.slice();
+		let pmathwindow = [-1,-1,1,1];
+		let mathwindow = pmathwindow.slice();
+		
 		window.setInterval(() => {
-			kernel(cfgf,cfgg,w,h,-10,-10,10,10,0);
+			cfgf = pcfgf.slice();
+			cfgg = pcfgg.slice();
+			mathwindow = pmathwindow.slice();
 			
-			for(let i = 0;i < cfgf.length;++i) cfgf[i] += 0.001 * (Math.random() - 0.5);
-			for(let i = 0;i < cfgg.length;++i) cfgg[i] += 0.001 * (Math.random() - 0.5);
+			for(let i = 0;i < cfgf.length;++i) cfgf[i] += 0.01 * (Math.random() - 0.5);
+			for(let i = 0;i < cfgg.length;++i) cfgg[i] += 0.01 * (Math.random() - 0.5);
+			for(let i = 0;i < mathwindow.length;++i) mathwindow[i] += 0.1 * (Math.random() - 0.5);
+			
+			kernel(cfgf,cfgg,w,h,mathwindow,0);
+			let xs = kernel2(cfgf,cfgg,w,h,mathwindow,0);
+				
+			//Coast Counter
+			var c = 0;
+			xs.forEach((ys) => {
+			ys.forEach((y) => {
+				if(y == 0 || y == 10 || y == 5) c++;
+			});
+			});
+			
+			c /= xs.length * xs[0].length;
+			
+			if(0.9 * c < pc) {
+				pc = c;
+				pcfgf = cfgf.slice();
+				pcfgg = cfgg.slice();
+				pmathwindow = mathwindow.slice();
+			}
 		},10);
 	</script>
 </body>
