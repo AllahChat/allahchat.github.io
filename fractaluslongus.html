@@ -1,0 +1,83 @@
+<html>
+<head>
+	<script src="gpu-browser.min.js"></script>
+	<script>
+		function fractalUFO(cfgf,cfgg,width,height,minx,miny,maxx,maxy,color) {
+			let xs = [
+				(maxx - minx) * this.thread.x / width + minx,
+				(maxy - miny) * this.thread.y / height + miny
+			];
+
+			let mz = 0;
+			let mk = 0;
+			
+			for(let k = 0;k < 10;++k) {
+				xs = f(cfgf,xs);
+				let zs = f(cfgg,xs);
+
+				if(zs[0] * zs[0] + zs[1] * zs[1] > mz) {
+					mz = zs[0] * zs[0] + zs[1] * zs[1];
+					mk = k;
+				}
+			}
+			
+			this.color(
+				(Math.sin(0.05 * mk * 2.0 * Math.PI + color) + 1.0) / 2.0,
+				(Math.sin(0.06 * mk * 2.0 * Math.PI + color) + 1.0) / 2.0,
+				(Math.sin(0.07 * mk * 2.0 * Math.PI + color) + 1.0) / 2.0,
+				1
+			);
+			return mk;
+		}
+		
+		let gpu = new GPU();
+		
+		gpu.addFunction(function f(cfg,xs) {
+			let x = 0;
+			for(let i = 0;i < 5;++i) x += cfg[8 * i + 0] * Math.pow(xs[0],cfg[8 * i + 1]);
+			for(let i = 0;i < 5;++i) x += cfg[8 * i + 2] * Math.pow(xs[1],cfg[8 * i + 3]);
+			
+			let y = 0;
+			for(let i = 0;i < 5;++i) y += cfg[8 * i + 4] * Math.pow(xs[0],cfg[8 * i + 5]);
+			for(let i = 0;i < 5;++i) y += cfg[8 * i + 6] * Math.pow(xs[1],cfg[8 * i + 7]);
+			
+			return [x,y];
+		});
+
+	</script>
+</head>
+<body>
+	<script>
+		let cfgf = new Float32Array(100);
+		for(let i = 0;i < cfgf.length;++i) cfgf[i] = Math.random() - 0.5;
+		
+		let cfgg = new Float32Array(100);
+		for(let i = 0;i < cfgg.length;++i) cfgg[i] = Math.random() - 0.5;
+		
+		let w = 512;
+		let h = 512;		
+		
+		const kernel = gpu.createKernel(fractalUFO).setOutput([w,h]).setGraphical(true);
+		const kernel2 = gpu.createKernel(fractalUFO).setOutput([w,h]);
+
+		//console.log(kernel2(w,h,-10,-10,10,10,0)[0]);
+
+		const cv = kernel.canvas;
+		
+		document.body.appendChild(cv);
+		cv.style.width = "100%";
+		cv.style.height = "100%";
+		
+		window.setInterval(() => {
+			kernel(cfgf,cfgg,w,h,-10,-10,10,10,0);
+			
+			for(let i = 0;i < cfgf.length;++i) cfgf[i] += 0.001 * (Math.random() - 0.5);
+			for(let i = 0;i < cfgg.length;++i) cfgg[i] += 0.001 * (Math.random() - 0.5);
+		},10);
+	</script>
+</body>
+</html>
+
+
+
+
