@@ -16,7 +16,16 @@
 			for(let k = 0;k <= 20;++k) {
 				xs = f(cfgf,xs);
 				let zs = f(cfgg,xs);
+/*				
+				if(xs[0] * xs[0] + xs[1] * xs[1] < zs[0] * zs[0] + zs[1] * zs[1]) {
+					mink = k;
+				}
 				
+				if(xs[0] * xs[0] + xs[1] * xs[1] > zs[0] * zs[0] + zs[1] * zs[1]) {
+					maxk = k;
+				}
+*/
+
 				if(zs[0] * zs[0] + zs[1] * zs[1] < minz) {
 					minz = zs[0] * zs[0] + zs[1] * zs[1];
 					mink = k;
@@ -46,16 +55,16 @@
 			let k = 0;
 			
 			let x = 0;
-			for(let i = 0;i < 3;++i) x += cfg[k++] * Math.pow(xs[0],cfg[k++]);
-			for(let i = 0;i < 3;++i) x += cfg[k++] * Math.pow(xs[1],cfg[k++]);
-			for(let i = 0;i < 3;++i) x += cfg[k++] * Math.pow(xs[0] * xs[1],cfg[k++]);
+			for(let i = 0;i < 5;++i) x += cfg[k++] * Math.pow(cfg[k++] * xs[0] + (1 - cfg[k++]) * xs[1],cfg[k++]);
+			let a = 0;
+			for(let i = 0;i < 5;++i) a += cfg[k++] * Math.pow(cfg[k++] * xs[0] + (1 - cfg[k++]) * xs[1],cfg[k++]);
 			
 			let y = 0;
-			for(let i = 0;i < 3;++i) y += cfg[k++] * Math.pow(xs[0],cfg[k++]);
-			for(let i = 0;i < 3;++i) y += cfg[k++] * Math.pow(xs[1],cfg[k++]);
-			for(let i = 0;i < 3;++i) y += cfg[k++] * Math.pow(xs[0] * xs[1],cfg[k++]);
+			for(let i = 0;i < 5;++i) x += cfg[k++] * Math.pow(cfg[k++] * xs[0] + (1 - cfg[k++]) * xs[1],cfg[k++]);
+			let b = 0;
+			for(let i = 0;i < 5;++i) b += cfg[k++] * Math.pow(cfg[k++] * xs[0] + (1 - cfg[k++]) * xs[1],cfg[k++]);
 			
-			return [x,y];
+			return [a * x,b * y];
 		});
 
 	</script>
@@ -63,10 +72,10 @@
 <body>
 	<script>
 		let cfgf = new Float32Array(10000);
-		for(let i = 0;i < cfgf.length;++i) cfgf[i] = 2 * (Math.random() - 0.5);
+		for(let i = 0;i < cfgf.length;++i) cfgf[i] = 1 * (Math.random() - 0.5);
 		
 		let cfgg = new Float32Array(10000);
-		for(let i = 0;i < cfgg.length;++i) cfgg[i] = 2 * (Math.random() - 0.5);
+		for(let i = 0;i < cfgg.length;++i) cfgg[i] = 1 * (Math.random() - 0.5);
 		
 		let w = 200;
 		let h = 200;		
@@ -82,10 +91,10 @@
 		cv.style.width = "100%";
 		cv.style.height = "100%";
 		
-		let pc = 1000000000;
+		let pc = 0;
 		let pcfgf = cfgf.slice();
 		let pcfgg = cfgg.slice();
-		let pmathwindow = [-1,-1,1,1];
+		let pmathwindow = [-2,-2,2,2];
 		let mathwindow = pmathwindow.slice();
 		
 		window.setInterval(() => {
@@ -95,7 +104,7 @@
 			
 			for(let i = 0;i < cfgf.length;++i) cfgf[i] += 0.002 * (Math.random() - 0.5);
 			for(let i = 0;i < cfgg.length;++i) cfgg[i] += 0.002 * (Math.random() - 0.5);
-			for(let i = 0;i < mathwindow.length;++i) mathwindow[i] += 0.1 * (Math.random() - 0.5);
+			for(let i = 0;i < mathwindow.length;++i) mathwindow[i] += 0.2 * (Math.random() - 0.5);
 			
 			kernel(cfgf,cfgg,w,h,mathwindow,0);
 			let xs = kernel2(cfgf,cfgg,w,h,mathwindow,0);
@@ -104,13 +113,13 @@
 			var c = 0;
 			xs.forEach((ys) => {
 			ys.forEach((y) => {
-				if(y == 0 || y == 10 || y == 5) c++;
+				c += y;
 			});
 			});
 			
 			c /= xs.length * xs[0].length;
-			
-			if(0.9999 * c < pc) {
+			if(0.9 * c > pc) {
+			console.log(c);
 				pc = c;
 				pcfgf = cfgf.slice();
 				pcfgg = cfgg.slice();
