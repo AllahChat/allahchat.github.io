@@ -13,7 +13,7 @@
 			let maxz = 0;
 			let maxk = 0;
 			
-			for(let k = 0;k <= 10;++k) {
+			for(let k = 0;k <= 20;++k) {
 				xs = f(cfgf,xs);
 				let zs = f(cfgg,xs);
 				
@@ -43,13 +43,17 @@
 		let gpu = new GPU();
 		
 		gpu.addFunction(function f(cfg,xs) {
+			let k = 0;
+			
 			let x = 0;
-			for(let i = 0;i < 3;++i) x += cfg[8 * i + 0] * Math.pow(xs[0],cfg[8 * i + 1]);
-			for(let i = 3;i < 6;++i) x += cfg[8 * i + 2] * Math.pow(xs[1],cfg[8 * i + 3]);
+			for(let i = 0;i < 3;++i) x += cfg[k++] * Math.pow(xs[0],cfg[k++]);
+			for(let i = 0;i < 3;++i) x += cfg[k++] * Math.pow(xs[1],cfg[k++]);
+			for(let i = 0;i < 3;++i) x += cfg[k++] * Math.pow(xs[0] * xs[1],cfg[k++]);
 			
 			let y = 0;
-			for(let i = 6;i < 9;++i) y += cfg[8 * i + 4] * Math.pow(xs[0],cfg[8 * i + 5]);
-			for(let i = 9;i < 12;++i) y += cfg[8 * i + 6] * Math.pow(xs[1],cfg[8 * i + 7]);
+			for(let i = 0;i < 3;++i) y += cfg[k++] * Math.pow(xs[0],cfg[k++]);
+			for(let i = 0;i < 3;++i) y += cfg[k++] * Math.pow(xs[1],cfg[k++]);
+			for(let i = 0;i < 3;++i) y += cfg[k++] * Math.pow(xs[0] * xs[1],cfg[k++]);
 			
 			return [x,y];
 		});
@@ -59,13 +63,13 @@
 <body>
 	<script>
 		let cfgf = new Float32Array(10000);
-		for(let i = 0;i < cfgf.length;++i) cfgf[i] = Math.random() - 0.5;
+		for(let i = 0;i < cfgf.length;++i) cfgf[i] = 2 * (Math.random() - 0.5);
 		
 		let cfgg = new Float32Array(10000);
-		for(let i = 0;i < cfgg.length;++i) cfgg[i] = Math.random() - 0.5;
+		for(let i = 0;i < cfgg.length;++i) cfgg[i] = 2 * (Math.random() - 0.5);
 		
-		let w = 512;
-		let h = 512;		
+		let w = 200;
+		let h = 200;		
 		
 		const kernel = gpu.createKernel(fractalUFO).setOutput([w,h]).setGraphical(true);
 		const kernel2 = gpu.createKernel(fractalUFO).setOutput([w,h]);
@@ -89,8 +93,8 @@
 			cfgg = pcfgg.slice();
 			mathwindow = pmathwindow.slice();
 			
-			for(let i = 0;i < cfgf.length;++i) cfgf[i] += 0.01 * (Math.random() - 0.5);
-			for(let i = 0;i < cfgg.length;++i) cfgg[i] += 0.01 * (Math.random() - 0.5);
+			for(let i = 0;i < cfgf.length;++i) cfgf[i] += 0.002 * (Math.random() - 0.5);
+			for(let i = 0;i < cfgg.length;++i) cfgg[i] += 0.002 * (Math.random() - 0.5);
 			for(let i = 0;i < mathwindow.length;++i) mathwindow[i] += 0.1 * (Math.random() - 0.5);
 			
 			kernel(cfgf,cfgg,w,h,mathwindow,0);
